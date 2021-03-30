@@ -1,0 +1,52 @@
+<!-- CALCULATOR -->
+<div class='uk-card uk-card-default uk-width-1-1 uk-margin-small-bottom uk-padding-small'>
+    <h1>Calculator</h1>
+
+    <script>
+
+        jQuery(document).ready(function () {
+            var cal_uom = productData.properties.find(el => el.command == 'sold-by');
+            var cal_product_coverage = productData.properties.find(el => el.command == 'coverage-per-sqft');
+
+            function uom_plural(uom, qty) {
+                switch (uom) {
+                    case 'piece':
+                        return (parseInt(qty) === 1) ? uom : 'pieces';
+                        break;
+                    case 'box':
+                        return (parseInt(qty) === 1) ? uom : 'boxes';
+                        break;
+                }
+            }
+
+            $('#cal-check').click(function (e) {
+
+                if ('undefined' === $('#cal-area').val() || '' === $('#cal-area').val()) {
+                    $('#cal-alert').addClass('uk-alert-danger').removeClass('uk-alert-primary')
+                    $('#cal-alert').children('p').html('<strong>Error</strong> Area should be at least equals to 1 sqft.');
+                } else {
+                    var area = (parseInt($('#cal-area').val()) === 0) ? 1 : parseInt($('#cal-area').val());
+                    var needed = Math.round((area / cal_product_coverage.value) * 1.01);
+                    $('#cal-alert').addClass('uk-alert-primary').removeClass('uk-alert-danger')
+                    $('#cal-alert').children('p').html(`<strong>You need ${needed} ${uom_plural(cal_uom.value)} for your project.</strong> Including 10% more for breakage and cuts.`);
+                    $('#cal-alert').fadeIn();
+                    logoff();
+                }
+
+                e.preventDefault();
+                return false;
+            });
+            var total_needed = Math.round()
+        });
+
+    </script>
+    <div class="uk-margin">
+        <div id='cal-alert' class="uk-alert-primary uk-padding-small" uk-alert style='display:none'>
+            <p></p>
+        </div>
+
+        <label class="uk-form-label uk-width-1-1">What is the size of the area you want to tile? (in SQFT)</label>
+        <input id='cal-area' class="uk-input uk-width-1-1 uk-margin-small" type="number" placeholder="1">
+        <button id='cal-check' class="uk-button uk-button-secondary uk-width-1-1">Check</button>
+    </div>
+</div>
